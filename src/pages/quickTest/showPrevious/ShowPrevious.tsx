@@ -46,7 +46,9 @@ const ShowPrevious = () => {
     }
     const res = await getApi(`quickTest/${idQuickTest}`, authUser.access_token);
 
-    setQuickTest(res.data.quickTest);
+    if (res && res.data) {
+      setQuickTest(res.data.quickTest);
+    }
   }, [authUser.access_token, dispatch, idQuickTest]);
 
   useEffect(() => {
@@ -133,13 +135,11 @@ const ShowPrevious = () => {
       }
       const test = [...results];
       setResults(test);
-      console.log("Result Checkbox: ", results);
     } else {
       s = value;
       results[quickTestOrder] = s;
       const test = [...results];
       setResults(test);
-      console.log("Results: ", results);
     }
   };
 
@@ -147,10 +147,6 @@ const ShowPrevious = () => {
     // Check dap an
     if (quickTest?.questions) {
       for (var i = 0; i < Number(quickTest.questions.length); i++) {
-        // console.log({
-        //   join: joinText(quickTest.questions[i].correctly),
-        //   re: results[i],
-        // });
         if (
           sortText(joinText(quickTest.questions[i].correctly)) ===
           sortText(results[i])
@@ -162,7 +158,6 @@ const ShowPrevious = () => {
 
     const values = [...correctlyQuickTests];
     setCorrectlyQuickTests(values);
-    // console.log("Correctly: ", correctlyQuickTests);
   };
 
   useEffect(() => {
@@ -291,10 +286,10 @@ const ShowPrevious = () => {
               return (
                 <div key={index} className="mt-2">
                   {/* Hiển thị số câu cho từng câu hỏi */}
-                  <h1 className="text-[20px] flex gap-2">
-                    <div className="">Cau {index + 1}:</div>
+                  <h1 className="text-[20px] flex">
+                    <div className="w-[130px]">Question {index + 1}:</div>
                     <div
-                      className=""
+                      className="w-full"
                       dangerouslySetInnerHTML={{
                         __html: q.titleQuestion,
                       }}
@@ -361,66 +356,69 @@ const ShowPrevious = () => {
         <div>
           <h2 className="font-mono text-[20px]">Tat ca cac cau da lam</h2>
           <div className="lg:grid md:flex sm:flex flex gap-2 lg:grid-cols-10 md:grid-cols-6 sm:grid-cols-5">
-            {quickTest?.questions?.map((n, index) => {
-              return (
-                <div className="" key={n._id}>
-                  {/* Kiem tra dap an khi da bam vao button Submit */}
-                  {isSubmit ? (
-                    <div className="">
-                      {correctlyQuickTests.includes(n) ? (
-                        <div
-                          className="
+            {quickTest &&
+              quickTest.questions &&
+              quickTest.questions.length &&
+              quickTest.questions.map((n, index) => {
+                return (
+                  <div className="" key={n._id}>
+                    {/* Kiem tra dap an khi da bam vao button Submit */}
+                    {isSubmit ? (
+                      <div className="">
+                        {correctlyQuickTests.includes(n) ? (
+                          <div
+                            className="
                         w-[20px] h-[20px] 
                         p-3 border-2 rounded-full
                         flex items-center justify-center
                         bg-green-500 cursor-pointer"
-                        >
-                          {index + 1}
-                        </div>
-                      ) : (
-                        <div
-                          className="
+                          >
+                            {index + 1}
+                          </div>
+                        ) : (
+                          <div
+                            className="
                         w-[20px] h-[20px] 
                         p-3 border-2 rounded-full
                         flex items-center justify-center
                         bg-red-500 cursor-pointer"
-                        >
-                          {index + 1}
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    // Kiểm tra khi chưa bấm vào nút Submit, và ghi nhận các câu đã làm và chưa làm
-                    <div className="">
-                      {results[index] === "" ? (
-                        <div
-                          className="
+                          >
+                            {index + 1}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      // Kiểm tra khi chưa bấm vào nút Submit, và ghi nhận các câu đã làm và chưa làm
+                      <div className="">
+                        {results[index] === "" ? (
+                          <div
+                            className="
                         w-[20px] h-[20px] 
                         p-3 border-2 rounded-full
                         flex items-center justify-center
                         hover:opacity-60 cursor-pointer"
-                        >
-                          {index + 1}
-                        </div>
-                      ) : (
-                        /**
-                         * Nếu đã chọn đáp án thì đổi màu
-                         */
-                        <div
-                          className="
+                          >
+                            {index + 1}
+                          </div>
+                        ) : (
+                          /**
+                           * Nếu đã chọn đáp án thì đổi màu
+                           */
+                          <div
+                            className="
                         w-[20px] h-[20px] 
                         p-3 border-2 rounded-full
                         flex items-center justify-center
                         bg-sky-500 hover:text-white cursor-pointer"
-                        >
-                          {index + 1}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                          >
+                            {index + 1}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
           </div>
 
           {isSubmit ? (

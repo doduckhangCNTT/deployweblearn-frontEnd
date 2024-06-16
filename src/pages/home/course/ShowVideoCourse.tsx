@@ -8,6 +8,7 @@ import { authSelector } from "../../../redux/selector/selectors";
 import { getApi } from "../../../utils/FetchData";
 import { ICourses, ILesson } from "../../../utils/Typescript";
 import ComboboxToUser from "./ComboboxToUser";
+import { Progress } from "antd";
 
 const ShowVideoCourse = () => {
   const [widthFull, setWidthFull] = useState(false);
@@ -28,7 +29,9 @@ const ShowVideoCourse = () => {
       }
       if (courseId) {
         const res = await getApi(`course/${courseId}`, authUser.access_token);
-        setCourse(res.data);
+        if (res && res.data) {
+          setCourse(res.data);
+        }
       }
     };
     handleGetCourse();
@@ -43,6 +46,53 @@ const ShowVideoCourse = () => {
       });
     });
   }, [course?.content, lessonId]);
+
+  /**Tiến trình khóa học */
+  const [progressCourse, setProgressCourse] = useState<number>(0);
+
+  /**
+   * Xét phần trăm hoàn thành khóa học
+   * @param percentCompleted Phần trăm hoàn thành khóa học
+   * Created By: DDKhang (01/06/2024)
+   */
+  function progressCallBack(percentCompleted: number) {
+    if (percentCompleted) {
+      setProgressCourse(percentCompleted);
+    }
+  }
+
+  useEffect(() => {
+    // Tính toán lấy thông tin mức độ hoàn thành khóa học
+    if (
+      authUser &&
+      authUser.user &&
+      authUser.user.courses &&
+      authUser.user.courses.length
+    ) {
+      const courseNow = authUser.user.courses.find(
+        (course) => course.course.toString() === courseId?.toString()
+      );
+      if (courseNow && courseNow.lessons && courseNow.lessons.length) {
+        const amountLessonOfUser = courseNow.lessons.length;
+        let totalAmountLessonOfCourse = 0;
+        if (course && course.content) {
+          course.content.forEach((contentItem) => {
+            if (
+              contentItem &&
+              contentItem.lessons &&
+              contentItem.lessons.length
+            ) {
+              totalAmountLessonOfCourse += contentItem.lessons.length;
+            }
+          });
+          const percentCompleted = Math.floor(
+            (amountLessonOfUser / totalAmountLessonOfCourse) * 100
+          );
+          setProgressCourse(percentCompleted);
+        }
+      }
+    }
+  }, [authUser, course, courseId]);
 
   return (
     <div className="lg:flex lg:flex-row gap-2 md:flex-row sm:flex-col flex-col">
@@ -145,15 +195,28 @@ const ShowVideoCourse = () => {
         }
       >
         <div className="">
+          {/* Tiến trình */}
+          <div className="border-2 mt-2">
+            <Progress
+              strokeColor="blue"
+              percent={progressCourse}
+              status="active"
+            />
+          </div>
           <h1 className="font-bold text-[30px]">Lessons</h1>
           <div className="">
-            {course?.content.map((co, index) => {
-              return (
-                <div className="" key={index}>
-                  <ComboboxToUser chapter={co} course={course} />
-                </div>
-              );
-            })}
+            {course &&
+              course.content.map((co, index) => {
+                return (
+                  <div className="" key={index}>
+                    <ComboboxToUser
+                      chapter={co}
+                      course={course}
+                      progressCallBack={progressCallBack}
+                    />
+                  </div>
+                );
+              })}
           </div>
         </div>
       </div>

@@ -8,8 +8,9 @@ const useOptionLocationUrl = () => {
   const page = urlParams.get("page");
   const sort = urlParams.get("sort");
   const time = urlParams.get("time");
+  const mode = urlParams.get("mode");
 
-  return { page, sort, time };
+  return { page, sort, time, mode };
 };
 
 export default useOptionLocationUrl;

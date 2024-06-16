@@ -116,7 +116,7 @@ const ManagerCourse = () => {
 
   const handleEditCourse = (courseId: string) => {
     dispatch(courseNowSlice.actions.getCourseIdNow({ courseId: courseId }));
-    navigate("/create_course");
+    navigate("/create_course?mode=edit");
   };
 
   const handleDetailCourse = (courseId: string) => {
@@ -166,7 +166,7 @@ const ManagerCourse = () => {
     <div>
       <div className="">
         <div className="flex flex-col">
-          <h1 className="font-bold text-[30px] my-2">Manager Blogs</h1>
+          <h1 className="font-bold text-[30px] my-2">Manager Courses</h1>
           <div className="mt-2 flex justify-end">
             <div className="flex flex-col gap-2 ">
               <form
@@ -182,7 +182,7 @@ const ManagerCourse = () => {
                 />
               </form>
 
-              <div className=" flex justify-end">
+              {/* <div className=" flex justify-end">
                 <div className="inline-block">
                   <button
                     onClick={handleDeleteCourses}
@@ -191,7 +191,7 @@ const ManagerCourse = () => {
                     Delete
                   </button>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

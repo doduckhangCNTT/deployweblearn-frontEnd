@@ -29,8 +29,6 @@ const Blogs = () => {
   const dispatch = useDispatch();
 
   const [blogsOfCategory, setBlogsOfCategory] = useState<IGetBlogsCategory>();
-  // const [limit, setLimit] = useState(3);
-  // const [qualityStart, setQualityStart] = useState(0);
   const [listBlogs, setListBlogs] = useState<IBlog[]>([]);
 
   useEffect(() => {
@@ -53,20 +51,18 @@ const Blogs = () => {
 
   useEffect(() => {
     const blogCategory = blogsCategory.find((item) => item._id === option);
-    setBlogsOfCategory(blogCategory);
+    if (blogCategory) {
+      setBlogsOfCategory(blogCategory);
+    }
   }, [blogsCategory, option]);
 
-  // const { BtnRender } = useInfinityQuery({
-  //   limit,
-  //   setLimit,
-  //   qualityStart,
-  //   setQualityStart,
-  //   blogs,
-  // });
-
   useEffect(() => {
-    if (blogs && listBlogs.length < blogs?.length) {
-      // blogs?.slice(qualityStart, limit).forEach((blog: IBlog) => {
+    if (
+      blogs &&
+      blogs.length > 0 &&
+      listBlogs &&
+      listBlogs.length < blogs.length
+    ) {
       blogs.forEach((blog: IBlog) => {
         const res = listBlogs?.find((item) => item._id === blog._id);
         if (!res) {

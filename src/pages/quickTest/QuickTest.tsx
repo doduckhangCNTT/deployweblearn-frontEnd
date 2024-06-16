@@ -24,6 +24,7 @@ import {
 } from "../../utils/Typescript";
 import { useParams } from "react-router-dom";
 import LazyLoadingImg from "../../components/LazyLoadingImg/LazyLoadingImg";
+import { StatusAccess } from "../../enum/enumeration";
 
 const QuickTest = () => {
   const initialState = {
@@ -38,6 +39,7 @@ const QuickTest = () => {
     numberOfTimes: 1,
     questions: [] as IQuestion[],
     createdAt: new Date().toISOString(),
+    statusAccess: "public",
   };
 
   const clearQuickTest = {
@@ -50,6 +52,7 @@ const QuickTest = () => {
       url: "",
     },
     numberOfTimes: 1,
+    statusAccess: "",
   };
   const [quickTest, setQuickTest] = useState<IQuickTest>(initialState);
   const [questionNow, setQuestionNow] = useState<IQuestionNow>();
@@ -105,9 +108,14 @@ const QuickTest = () => {
     handleQuickTestNow();
   }, [authUser.access_token, quickTestNow.id]);
 
+  /**
+   * Bắt sự thay đổi trên thẻ input
+   */
   const handleChangeInput = (e: InputChangedEvent) => {
     const { name, value } = e.target;
-    setQuickTest({ ...quickTest, [name]: value });
+    if (name && value) {
+      setQuickTest({ ...quickTest, [name]: value });
+    }
   };
 
   const handleChangeQuickTest = (e: InputChangedEvent) => {
@@ -169,6 +177,22 @@ const QuickTest = () => {
     handleAddQuickTest();
   };
 
+  /**
+   * Xử lí trạng thái truy cập quick test
+   * @param e
+   */
+  function handleStatusAccessQT(e: InputChangedEvent) {
+    e.preventDefault();
+    const { name, value } = e.target;
+    if (name && value) {
+      setQuickTest({ ...quickTest, [name]: value });
+    }
+
+    if (!value) {
+      setQuickTest({ ...quickTest, [name]: StatusAccess.public });
+    }
+  }
+
   return (
     <div className="">
       {/* Navbar */}
@@ -229,7 +253,6 @@ const QuickTest = () => {
                   onChange={handleChangeInput}
                 />
               </div>
-
               {/* Category of quickTest */}
               <div className="flex flex-col gap-2">
                 <h1 className="font-bold text-[20px] my-3">Categories</h1>
@@ -240,14 +263,15 @@ const QuickTest = () => {
                   onChange={handleChangeInput}
                 >
                   <option value="">Choose a category</option>
-                  {categories?.map((category) => (
-                    <option key={category._id} value={category._id}>
-                      {category.name}
-                    </option>
-                  ))}
+                  {categories &&
+                    categories.length &&
+                    categories.map((category) => (
+                      <option key={category._id} value={category._id}>
+                        {category.name}
+                      </option>
+                    ))}
                 </select>
               </div>
-
               {/* Time */}
               <div className="flex flex-col gap-2 ">
                 <h1 className="font-bold text-[20px]">Time</h1>
@@ -262,7 +286,6 @@ const QuickTest = () => {
                   <span className="">minutes</span>
                 </div>
               </div>
-
               {/* Description */}
               <div className="flex flex-col gap-2">
                 <h1 className="font-bold text-[20px]">Description</h1>
@@ -275,7 +298,16 @@ const QuickTest = () => {
                   // defaultValue="At w3schools.com you will learn how to make a website. They offer free tutorials in all web development technologies."
                 />
               </div>
-
+              {/* Trạng thái bài kiểm tra */}
+              <select
+                className="w-[300px] border-2"
+                name="statusAccess"
+                onChange={handleStatusAccessQT}
+              >
+                <option value="">Choose status access QuickTest</option>
+                <option value={StatusAccess.public}>Public</option>
+                <option value={StatusAccess.private}>Private</option>
+              </select>
               {/* Image */}
               <div className="">
                 <h1 className="font-bold text-[20px]">Image</h1>

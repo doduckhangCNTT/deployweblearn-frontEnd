@@ -53,7 +53,7 @@ const quickTestAction = {
 
       const resQuickTests = await getApi("quickTests", access_token);
       // console.log("Quick Tests: ", resQuickTests);
-      if (resQuickTests.data) {
+      if (resQuickTests && resQuickTests.data) {
         dispatch(quickTestSlice.actions.createQuickTests(resQuickTests.data));
       }
 
@@ -164,6 +164,38 @@ const quickTestAction = {
   ) => {
     try {
       dispatch(alertSlice.actions.alertAdd({ loading: true }));
+
+      dispatch(alertSlice.actions.alertAdd({ loading: false }));
+    } catch (error: any) {
+      dispatch(alertSlice.actions.alertAdd({ error: error.message }));
+    }
+  },
+
+  /**
+   *
+   * @param quickTestId Mã quick Test
+   * @param token
+   * @param dispatch
+   */
+  deleteQuickTestId: async (
+    quickTestId: string,
+    token: string,
+    dispatch: AppDispatch
+  ) => {
+    const result = await checkTokenExp(token, dispatch);
+    const access_token = result ? result : token;
+    try {
+      dispatch(alertSlice.actions.alertAdd({ loading: true }));
+
+      dispatch(quickTestSlice.actions.deleteQuickTestId({ quickTestId }));
+      // Xóa trên Database
+      const res = await deleteApi(`quickTest/${quickTestId}`, access_token);
+      if (res && res.data && res.data.success) {
+        // Thông báo
+        dispatch(
+          alertSlice.actions.alertAdd({ success: "Delete success quickTest" })
+        );
+      }
 
       dispatch(alertSlice.actions.alertAdd({ loading: false }));
     } catch (error: any) {

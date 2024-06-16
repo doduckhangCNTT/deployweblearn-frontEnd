@@ -21,6 +21,9 @@ const CreateCategory = React.lazy(
 
 // ============================= Quick Test =============================
 const QuickTest = React.lazy(() => import("../pages/quickTest/QuickTest"));
+const MyQuickTest = React.lazy(
+  () => import("../pages/quickTest/myQuickTest/MyQuickTest")
+);
 const ShowPrevious = React.lazy(
   () => import("../pages/quickTest/showPrevious/ShowPrevious")
 );
@@ -85,6 +88,10 @@ const ShowVideoCourse = React.lazy(
   () => import("../pages/home/course/ShowVideoCourse")
 );
 
+// ============================= Movie Film =============================
+
+const IndexFilm = React.lazy(() => import("../pages/moviefilm/Index"));
+
 // ============================= Manager =============================
 const Manager = React.lazy(() => import("../pages/manager/Manager"));
 const Index = React.lazy(() => import("../pages/manager/Index"));
@@ -134,6 +141,9 @@ const HandleRouter = () => {
             element={<ShowPrevious />}
           />
 
+          {/* My quick test */}
+          <Route path="my_quick_test" element={<MyQuickTest />} />
+
           {/* Profile */}
           <Route path="your_profile" element={<UserProfile />} />
           <Route path="your_setting" element={<UserSetting />} />
@@ -165,6 +175,11 @@ const HandleRouter = () => {
             <Route path="blog" element={<ManagerBlog />} />
             <Route path="test" element={<ManagerTest />} />
             <Route path="course" element={<ManagerCourse />} />
+          </Route>
+
+          {/* Movie Film */}
+          <Route path="/movie_film">
+            <Route index element={<IndexFilm />} />
           </Route>
 
           {/* Blog */}

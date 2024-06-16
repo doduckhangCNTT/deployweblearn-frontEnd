@@ -85,9 +85,11 @@ const CreateBlog: React.FC<IProps> = React.memo(({ id, valueId }) => {
       if (!valueId) return;
       const res = await getApi(`draftBlog/${valueId}`);
 
-      setBlog(res.data.blog);
-      setBody(res.data.blog.content);
-      setOldData(res.data.blog);
+      if (res && res.data) {
+        setBlog(res.data.blog);
+        setBody(res.data.blog.content);
+        setOldData(res.data.blog);
+      }
     };
     getDraftBlog();
 
@@ -159,7 +161,7 @@ const CreateBlog: React.FC<IProps> = React.memo(({ id, valueId }) => {
   };
 
   const handleDraftBlogSubmit = () => {
-    if (!authUser.access_token)
+    if (!authUser || !authUser.access_token)
       return dispatch(
         alertSlice.actions.alertAdd({ error: "Invalid Authentication" })
       );

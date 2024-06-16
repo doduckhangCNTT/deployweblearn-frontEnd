@@ -15,6 +15,12 @@ interface IQuestionDeleteType {
   };
 }
 
+interface IQuickTestDeleteType {
+  payload: {
+    quickTestId: string;
+  };
+}
+
 export const quickTestSlice = createSlice({
   name: "quickTest",
   initialState,
@@ -60,6 +66,23 @@ export const quickTestSlice = createSlice({
       });
 
       return value;
+    },
+
+    /**
+     * Xóa thông tin quickTest
+     * @param state
+     * @param action
+     * @returns
+     */
+    deleteQuickTestId: (state, action: IQuickTestDeleteType) => {
+      if (action && action.payload && action.payload.quickTestId) {
+        if (state && state.length) {
+          const result = state.filter(
+            (item) => item._id?.toString() !== action.payload.quickTestId
+          );
+          return result;
+        }
+      }
     },
   },
 });

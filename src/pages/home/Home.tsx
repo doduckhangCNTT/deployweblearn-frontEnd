@@ -8,6 +8,7 @@ import PaidCourse from "./paidCourse/PaidCourse";
 import SlideShow from "./slideShow/SlideShow";
 import BlogHome from "./blog/Blogs";
 import categoryAction from "../../redux/action/categoryAction";
+import ProgressCourse from "./progressCourse/ProgressCourse";
 
 const Home = () => {
   const { authUser } = useSelector(authSelector);
@@ -29,6 +30,11 @@ const Home = () => {
       {/* Slide show */}
       <div className="">
         <SlideShow />
+      </div>
+
+      {/* Progress Course */}
+      <div className="">
+        <ProgressCourse />
       </div>
 
       {/* Paid Courses */}

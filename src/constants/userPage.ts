@@ -1,1 +1,1 @@
-export const LIMIT_TEST_PAGE_USER = 2;
+export const LIMIT_TEST_PAGE_USER = 10;

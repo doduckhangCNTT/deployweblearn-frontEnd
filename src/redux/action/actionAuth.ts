@@ -1,5 +1,10 @@
 import { getApi, postApi } from "../../utils/FetchData";
-import { AppDispatch, IUserLogin, IUserRegister } from "../../utils/Typescript";
+import {
+  AppDispatch,
+  IUser,
+  IUserLogin,
+  IUserRegister,
+} from "../../utils/Typescript";
 import { validPhone, validRegister } from "../../utils/Valid";
 import { alertSlice } from "../reducers/alertSlice";
 import { authSlice } from "../reducers/authSlice";
@@ -11,7 +16,7 @@ const actionAuth = {
     dispatch: AppDispatch
   ) => {
     const check = validRegister(userRegister);
-    if (check.errLength > 0) {
+    if (check && check.errLength > 0) {
       return dispatch(alertSlice.actions.alertAdd({ error: check.errMsg }));
     }
 
@@ -19,11 +24,14 @@ const actionAuth = {
       dispatch(alertSlice.actions.alertAdd({ loading: true }));
 
       const res = await postApi("register", userRegister);
-      if (!res.data.success) {
-        return dispatch(alertSlice.actions.alertAdd({ error: res.data.msg }));
-      }
 
-      dispatch(alertSlice.actions.alertAdd({ success: res.data.msg }));
+      if (res && res.data) {
+        if (!res.data.success) {
+          return dispatch(alertSlice.actions.alertAdd({ error: res.data.msg }));
+        }
+
+        dispatch(alertSlice.actions.alertAdd({ success: res.data.msg }));
+      }
     } catch (error: any) {
       dispatch(alertSlice.actions.alertAdd({ error: error.message }));
     }
@@ -131,6 +139,35 @@ const actionAuth = {
       if (!res.data.valid) {
         verifySms(phone, dispatch);
       }
+      dispatch(alertSlice.actions.alertAdd({ loading: false }));
+    } catch (error: any) {
+      dispatch(alertSlice.actions.alertAdd({ error: error.message }));
+    }
+  },
+
+  /**
+   * Cập nhật thông itn mới cho người dùng
+   * @param newInfoUser Thông tin mới của người dùng
+   * @param dispatch
+   * Created By: DDKhang (02/06/2024)
+   */
+  updateNewInfoForUser: async (
+    newInfoUser: { user: IUser; access_token?: string },
+    dispatch: AppDispatch
+  ) => {
+    try {
+      dispatch(alertSlice.actions.alertAdd({ loading: true }));
+
+      if (newInfoUser) {
+        const res = await getApi(
+          `/users/${newInfoUser.user._id}`,
+          newInfoUser.access_token
+        );
+        if (res && res.data) {
+          dispatch(authSlice.actions.updateNewInfoUser(res.data));
+        }
+      }
+
       dispatch(alertSlice.actions.alertAdd({ loading: false }));
     } catch (error: any) {
       dispatch(alertSlice.actions.alertAdd({ error: error.message }));

@@ -40,13 +40,17 @@ const blogAction = {
         let formData = new FormData();
         formData.append("file", blog.thumbnail.url);
         const resImg = await postApi("upload", formData, access_token);
-        data = { public_id: resImg.data.public_id, url: resImg.data.url };
+        if (resImg && resImg.data) {
+          data = { public_id: resImg.data.public_id, url: resImg.data.url };
+        }
       }
 
       const newBlog = { ...blog, thumbnail: data, classify };
       const res = await postApi("blog", newBlog, access_token);
 
-      dispatch(blogSlice.actions.createBlog(res.data));
+      if (res && res.data) {
+        dispatch(blogSlice.actions.createBlog(res.data));
+      }
       // dispatch(categorySlice.actions.createCategory(res.data));
 
       if (blog._id) {
@@ -70,8 +74,9 @@ const blogAction = {
       const limit = 3;
       const value = search ? search : `?page=${1}`;
       const res = await getApi(`blog${value}&limit=${limit}`);
-      // console.log("Res: ", res);
-      dispatch(blogSlice.actions.getBlog(res.data));
+      if (res && res.data) {
+        dispatch(blogSlice.actions.getBlog(res.data));
+      }
 
       dispatch(alertSlice.actions.alertAdd({ loading: false }));
     } catch (error: any) {
@@ -83,8 +88,10 @@ const blogAction = {
     try {
       dispatch(alertSlice.actions.alertAdd({ loading: true }));
       const res = await getApi(`blogs`);
-      // console.log("Res: ", res);
-      dispatch(blogSlice.actions.getBlog(res.data));
+
+      if (res && res.data) {
+        dispatch(blogSlice.actions.getBlog(res.data));
+      }
 
       dispatch(alertSlice.actions.alertAdd({ loading: false }));
     } catch (error: any) {
@@ -99,7 +106,9 @@ const blogAction = {
       dispatch(alertSlice.actions.alertAdd({ loading: true }));
 
       const res = await getApi("blog/draft", access_token);
-      dispatch(draftBlogSlice.actions.getBlog(res.data));
+      if (res && res.data) {
+        dispatch(draftBlogSlice.actions.getBlog(res.data));
+      }
 
       dispatch(alertSlice.actions.alertAdd({ loading: false }));
     } catch (error: any) {
@@ -128,9 +137,10 @@ const blogAction = {
         let formData = new FormData();
         formData.append("file", blog.thumbnail.url);
         const resImg = await postApi("upload", formData, access_token);
-        data = { public_id: resImg.data.public_id, url: resImg.data.url };
+        if (resImg && resImg.data) {
+          data = { public_id: resImg.data.public_id, url: resImg.data.url };
+        }
       }
-
       const newBlog = {
         ...blog,
         thumbnail: data,
@@ -140,8 +150,9 @@ const blogAction = {
         blogSlice.actions.updateBlog({ id: newBlog._id, newBlog: newBlog })
       );
       const res = await putApi(`blog/${newBlog._id}`, newBlog, access_token);
-
-      dispatch(alertSlice.actions.alertAdd({ success: res.data.msg }));
+      if (res && res.data) {
+        dispatch(alertSlice.actions.alertAdd({ success: res.data.msg }));
+      }
     } catch (error: any) {
       dispatch(alertSlice.actions.alertAdd({ error: error.message }));
     }
@@ -176,7 +187,9 @@ const blogAction = {
         );
         res = await deleteApi(`draftBlog/${blog._id}`, access_token);
       }
-      dispatch(alertSlice.actions.alertAdd({ success: res?.data.msg }));
+      if (res && res.data) {
+        dispatch(alertSlice.actions.alertAdd({ success: res.data?.msg }));
+      }
     } catch (error: any) {
       dispatch(alertSlice.actions.alertAdd({ error: error.message }));
     }

@@ -6,7 +6,6 @@ interface IProps {
   content: string;
   titleQuestion: string;
   index: number;
-  // handleChangeInput: (event: any) => void;
 }
 
 const ShowAnswer: React.FC<IProps> = ({
@@ -14,17 +13,12 @@ const ShowAnswer: React.FC<IProps> = ({
   content,
   titleQuestion,
   index,
-  // handleChangeInput,
 }) => {
   const [checkedRadio, setCheckedRadio] = useState<string>();
   const [checkedCheckBox, setCheckedCheckBox] = useState<string[]>([]);
 
-  // console.log("CheckedRadio: ", checkedRadio);
-  // console.log("CheckedCheckBox: ", checkedCheckBox);
-
   const HandleChangeRadio = (e: InputChangedEvent) => {
     const { value } = e.target;
-    // console.log("Radio: ", value);
 
     if (typeQuestion === "radio") {
       setCheckedRadio(value);

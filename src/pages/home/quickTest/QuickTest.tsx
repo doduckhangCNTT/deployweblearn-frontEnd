@@ -25,28 +25,32 @@ const QuickTestHome = () => {
   return (
     <FrameList titleList="Quick Tests">
       <>
-        {quickTests.map((quickTest, index) => {
-          return (
-            <Fragment key={index}>
-              <div className="border-2 rounded-lg hover:shadow-md gap-3">
-                <Link to={`/quick_test/show_previous/${quickTest._id}`}>
-                  <div className="">
-                    <img
-                      src={quickTest.image.url as string}
-                      alt=""
-                      className="rounded-lg h-[250px] w-full object-cover"
-                    />
+        {quickTests &&
+          quickTests.length &&
+          quickTests
+            .filter((test) => test.statusAccess !== "private")
+            .map((quickTest, index) => {
+              return (
+                <Fragment key={index}>
+                  <div className="border-2 rounded-lg hover:shadow-md gap-3">
+                    <Link to={`/quick_test/show_previous/${quickTest._id}`}>
+                      <div className="">
+                        <img
+                          src={quickTest.image.url as string}
+                          alt=""
+                          className="rounded-lg h-[250px] w-full object-cover"
+                        />
+                      </div>
+                      <div className="p-2">
+                        <h1 className="font-bold text-[20px] hover:text-sky-500">
+                          {quickTest.titleTest}
+                        </h1>
+                      </div>
+                    </Link>
                   </div>
-                  <div className="p-2">
-                    <h1 className="font-bold text-[20px] hover:text-sky-500">
-                      {quickTest.titleTest}
-                    </h1>
-                  </div>
-                </Link>
-              </div>
-            </Fragment>
-          );
-        })}
+                </Fragment>
+              );
+            })}
       </>
     </FrameList>
   );

@@ -15,9 +15,6 @@ const Navbar = () => {
           {listComponentOfNavbar.map((item, index) => {
             return (
               <NavLink
-                // style={({ isActive }) => {
-                //   return { color: isActive ? "blue" : "black" };
-                // }}
                 className={({ isActive }) => {
                   return isActive
                     ? "mt-5 flex flex-col gap-y-1 items-center text-sky-600 transition"
@@ -25,7 +22,6 @@ const Navbar = () => {
                 }}
                 key={index}
                 to={`${item.path}`}
-                // className="mt-5 flex flex-col gap-y-1 items-center hover:text-sky-600 transition"
               >
                 <div>{item.icon}</div>
                 <div className="">{item.name}</div>

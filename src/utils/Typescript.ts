@@ -31,6 +31,25 @@ export interface IUser extends IUserLogin {
   updatedAt: string;
   _id: string;
   rf_token: string;
+  courses: ICourseOfUser[];
+}
+
+export interface ICourseOfUser {
+  /**Mã khóa học */
+  course: string;
+  /**Tiến trình khóa học */
+  progressLesson: number;
+  /**Mã bài học */
+  lessonId: string;
+  lessons?: ILessonOfUser[];
+}
+
+interface ILessonOfUser {
+  lessonId: string;
+  quiz?: {
+    quizId: string;
+    completed: boolean;
+  };
 }
 
 export interface IUserProfile extends IUserRegister {
@@ -205,6 +224,7 @@ export interface IQuickTest {
   questions?: IQuestion[];
   idQuickTest?: string;
   createdAt?: string;
+  statusAccess?: string;
 }
 
 export interface IQuestion {
@@ -255,7 +275,9 @@ export interface ICourses {
 
 export interface IChapter {
   _id?: string;
+  /**Tên chương */
   name: string;
+  /**Thông tin các bài học */
   lessons: ILesson[];
 }
 
@@ -269,4 +291,25 @@ export interface ILesson {
     mimetype: string;
   };
   description: string;
+  /**Mã bài test */
+  quiz?: {
+    /**Mã bài test */
+    quizId: string;
+    /**Trạng thái hoàn thành */
+    completed: boolean;
+    /**Trạng thái bắt buộc/tùy chọn (required/optional) */
+    status: string;
+  };
+  /**Trạng thái làm bài bài test */
+  statusDoQuiz?: string;
+
+  /**Trạng thái hoàn thành bài học */
+  isCompleted?: boolean;
+}
+
+export interface IQuizInfoParam {
+  quizId: string;
+  point: number;
+  isCompleted: boolean;
+  pointMinimal: number;
 }

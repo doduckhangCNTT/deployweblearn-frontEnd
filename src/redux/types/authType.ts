@@ -11,3 +11,11 @@ export interface IAuth {
 export interface IAuthType {
   payload: IAuth;
 }
+
+interface INewInfoUser {
+  user: IUser;
+}
+
+export interface INewInfoUserType {
+  payload: INewInfoUser;
+}

@@ -9,17 +9,27 @@ interface IDecode {
   id: string;
 }
 
+/**
+ * Kiểm tra xem token người dùng đã hết hạn chưa
+ * @param token Token người dùng đăng nhập
+ * @param dispatch
+ * @returns
+ */
 export const checkTokenExp = async (token: string, dispatch: AppDispatch) => {
   if (token) {
-    // console.log("Token: ", token);
     const decode: IDecode = jwt_decode(token);
-    // console.log("Decode: ", decode);
 
+    // Chưa hết hạn token
     if (decode.exp >= Date.now() / 1000) return;
+
+    // Hết hạn -> Lấy thông tin token mới
     const res = await getApi("refresh_token");
     // await actionAuth.refreshAction(dispatch);
     // console.log("ACCESS_TOKEN: ", res.data);
-    return res.data.access_token;
+    if (res && res.data) {
+      return res.data.access_token;
+    }
+    return "";
   } else {
     dispatch(alertSlice.actions.alertAdd({ error: "Invalid Authentication" }));
   }

@@ -38,6 +38,10 @@ const listInfoOfUser = {
     name: "Quick Test",
     path: "/quick_test",
   },
+  MyQuickTest: {
+    name: "My Quick Test",
+    path: "/my_quick_test",
+  },
   createCourse: {
     name: "Create Course",
     path: "/create_course",
@@ -113,12 +117,13 @@ export default function Header() {
                   <div className="flex-shrink-0 flex items-center">
                     <Link to="/" className="flex">
                       <LazyLoadingImg
-                        url="https://media.istockphoto.com/photos/graduation-hat-and-diploma-cartoon-style-with-clouds-on-abstract-3d-picture-id1338320564?s=612x612"
+                        url="https://res.cloudinary.com/duan5rafi/image/upload/v1715441556/learnWeb/logoCourse.png"
                         alt="Logo"
-                        className="hidden lg:block h-8  w-auto"
+                        className="hidden lg:block h-8 w-auto"
                       />
+                      <div className="logo"></div>
                       <h1 className="md:block sm:hidden xs:hidden font-semibold ml-5 text-[25px] ">
-                        LEARNING CODE
+                        LEARNING CAMP
                       </h1>
                     </Link>
                   </div>
@@ -235,35 +240,61 @@ export default function Header() {
                                       )}
                                     </Menu.Item>
 
-                                    {/* Quick Test */}
-                                    <Menu.Item>
-                                      {({ active }) => (
-                                        <Link
-                                          to={listInfoOfUser.quickTest.path}
-                                          className={classNames(
-                                            active ? "bg-gray-100" : "",
-                                            "block px-4 py-2 text-sm text-gray-700"
+                                    {authUser.user.role === "admin" ||
+                                    authUser.user.role === "teacher" ? (
+                                      <>
+                                        {/* Quick Test */}
+                                        <Menu.Item>
+                                          {({ active }) => (
+                                            <Link
+                                              to={listInfoOfUser.quickTest.path}
+                                              className={classNames(
+                                                active ? "bg-gray-100" : "",
+                                                "block px-4 py-2 text-sm text-gray-700"
+                                              )}
+                                            >
+                                              {listInfoOfUser.quickTest.name}
+                                            </Link>
                                           )}
-                                        >
-                                          {listInfoOfUser.quickTest.name}
-                                        </Link>
-                                      )}
-                                    </Menu.Item>
+                                        </Menu.Item>
 
-                                    {/* Create Course */}
-                                    <Menu.Item>
-                                      {({ active }) => (
-                                        <Link
-                                          to={listInfoOfUser.createCourse.path}
-                                          className={classNames(
-                                            active ? "bg-gray-100" : "",
-                                            "block px-4 py-2 text-sm text-gray-700"
+                                        {/* My Quick Test */}
+                                        <Menu.Item>
+                                          {({ active }) => (
+                                            <Link
+                                              to={
+                                                listInfoOfUser.MyQuickTest.path
+                                              }
+                                              className={classNames(
+                                                active ? "bg-gray-100" : "",
+                                                "block px-4 py-2 text-sm text-gray-700"
+                                              )}
+                                            >
+                                              {listInfoOfUser.MyQuickTest.name}
+                                            </Link>
                                           )}
-                                        >
-                                          {listInfoOfUser.createCourse.name}
-                                        </Link>
-                                      )}
-                                    </Menu.Item>
+                                        </Menu.Item>
+
+                                        {/* Create Course */}
+                                        <Menu.Item>
+                                          {({ active }) => (
+                                            <Link
+                                              to={
+                                                listInfoOfUser.createCourse.path
+                                              }
+                                              className={classNames(
+                                                active ? "bg-gray-100" : "",
+                                                "block px-4 py-2 text-sm text-gray-700"
+                                              )}
+                                            >
+                                              {listInfoOfUser.createCourse.name}
+                                            </Link>
+                                          )}
+                                        </Menu.Item>
+                                      </>
+                                    ) : (
+                                      ""
+                                    )}
                                   </div>
                                 ) : (
                                   ""

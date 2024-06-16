@@ -26,8 +26,10 @@ const blogPageAction = {
         `blogsPage?page=${page}&limit=${limit}`,
         access_token
       );
-      const { blogs, totalCount } = res.data;
-      dispatch(blogPageSlice.actions.getBlogsPage({ blogs, totalCount }));
+      if (res && res.data) {
+        const { blogs, totalCount } = res.data;
+        dispatch(blogPageSlice.actions.getBlogsPage({ blogs, totalCount }));
+      }
 
       dispatch(alertSlice.actions.alertAdd({ loading: false }));
     } catch (error: any) {

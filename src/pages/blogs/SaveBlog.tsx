@@ -14,19 +14,14 @@ const SaveBlog = () => {
   const { saveBlog } = useSelector(saveBlogUserSelector);
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   if (!authUser.access_token || !authUser.user) return;
-  //   saveBlogAction.getBlogs(authUser, dispatch);
-  // }, [authUser, authUser.user, dispatch]);
-
   // Give Blog user saved
   useEffect(() => {
-    if (!(saveBlog as any).blogs) {
+    if (!(saveBlog as any)?.blogs) {
       saveBlogAction.getBlogs(authUser, dispatch);
     }
   }, [authUser, dispatch, saveBlog]);
 
-  if (!authUser.access_token) return <NotFound />;
+  if (!authUser?.access_token) return <NotFound />;
   return (
     <div className="m-5">
       <h1 className="text-[30px]">
@@ -48,7 +43,6 @@ const SaveBlog = () => {
 
         <div className="w-1/3">
           <h1 className="text-[20px] font-bold text-center">Introduce Blog</h1>
-
           <div></div>
         </div>
       </div>

@@ -22,10 +22,6 @@ const CountDownTimer: React.FC<IProps> = ({ quickTest }) => {
   const [timer, setTimer] = useState("00:00:00");
 
   const getTimeRemaining = (e: any) => {
-    // console.log({
-    //   value1: Date.parse(e),
-    //   value2: Date.parse(new Date().toISOString()),
-    // });
     const total = Date.parse(e) - Date.parse(new Date().toISOString());
     const seconds = Math.floor((total / 1000) % 60);
     const minutes = Math.floor((total / 1000 / 60) % 60);
@@ -56,7 +52,6 @@ const CountDownTimer: React.FC<IProps> = ({ quickTest }) => {
 
     if (hours === 0 && minutes === 0 && seconds === 0) {
       setIsDeadTime(!isDeadTime);
-      console.log("Het time");
       dispatch(
         countDownSlice.actions.updateStatusCountDown({
           status: !statusCountDown.status,
@@ -128,6 +123,7 @@ const CountDownTimer: React.FC<IProps> = ({ quickTest }) => {
     <div>
       <h1 className="font-bold text-[20px]">Time: {timer}</h1>
       <button onClick={onClickReset}>Reset</button>
+      <button onClick={onClickReset}>Pause</button>
     </div>
   );
 };

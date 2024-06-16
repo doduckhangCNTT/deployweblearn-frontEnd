@@ -10,7 +10,6 @@ const SocketClientRoom = () => {
 
   useEffect(() => {
     (socket.value as Socket)?.on("createRoom", (data: any) => {
-      console.log("Data: ", data);
       dispatch(
         roomChatSlice.actions.createRoomChat({
           roomChat: data,

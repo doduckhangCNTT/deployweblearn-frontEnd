@@ -19,13 +19,13 @@ const PreviewCourse: React.FC<IProps> = ({ course }) => {
               <LazyLoadingImg
                 url={course.thumbnail.url}
                 alt=""
-                className="w-full"
+                className="w-full h-[300px]"
               />
             ) : (
               <LazyLoadingImg
                 url={URL.createObjectURL(course.thumbnail.url as Blob)}
                 alt=""
-                className="w-full"
+                className="w-full h-[300px]"
               />
             )}
           </div>

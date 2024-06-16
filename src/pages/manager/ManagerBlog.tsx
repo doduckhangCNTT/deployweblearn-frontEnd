@@ -61,6 +61,9 @@ const ManagerBlog = () => {
     blogPageAction.getBlogsPage(data, authUser.access_token, dispatch);
   };
 
+  /**
+   * Lấy danh sách các blog của trong hiện tại
+   */
   const handleGetsBlogsPage = useCallback(() => {
     if (!authUser.access_token) {
       return dispatch(
@@ -68,7 +71,7 @@ const ManagerBlog = () => {
       );
     }
 
-    if (searchValue.trim() !== "") {
+    if (searchValue && searchValue.trim() !== "") {
       const data = {
         page: page ? Number(page) : 1,
         limit: LIMIT_BLOG_PAGE_SEARCH,
@@ -98,8 +101,11 @@ const ManagerBlog = () => {
       `blogsPage?page=${page}&limit=${LIMIT_BLOG_PAGE}`,
       authUser.access_token
     );
-    const { blogs } = res.data;
-    return blogs as IBlog[];
+
+    if (res && res.data) {
+      const { blogs } = res.data;
+      return blogs as IBlog[];
+    }
   };
 
   useEffect(() => {
@@ -107,10 +113,10 @@ const ManagerBlog = () => {
   }, [handleGetsBlogsPage]);
 
   useEffect(() => {
-    if (blogs.length <= 0) {
+    if (blogs && blogs.length <= 0) {
       blogAction.getBlogs(dispatch);
     }
-  }, [blogs.length, dispatch]);
+  }, [blogs, blogs.length, dispatch]);
 
   // =============================== Get Blogs Page =============================
   const totalPage = useMemo(() => {
@@ -135,7 +141,6 @@ const ManagerBlog = () => {
 
   const handleDeleteListBlog = () => {
     if (window.confirm("Are you sure you want to delete this blog")) {
-      console.log("Checked Blog: ", checkedBlogs);
     }
   };
 
